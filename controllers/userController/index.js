@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const userValidator = require('../validators/userValidator');
-const UserModel = require("../models/userModel");
+const userValidator = require('../../validators/userValidator');
+const UserModel = require("../../models/userModel");
 
 exports.create = async (req, res) => {
   try {
