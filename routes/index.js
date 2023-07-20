@@ -10,7 +10,7 @@ const playlistRouter = require('./playlists');
 
 router.use('/users', userRouter);
 //comento ya que no defini los index de songs y playlists
-//router.use('/songs', songRouter);
+router.use('/songs', songRouter);
 //router.use('/playlists', playlistRouter);
 
 module.exports = router;

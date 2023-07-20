@@ -11,7 +11,7 @@ exports.create = async (req, res) => {
     const nickname = req.body.nickname;
     const email = req.body.email;
     // Validar los parámetros
-    const errores = userValidator.validateUser(user_name, user_password);
+    const errores = userValidator.validateUser(user_name, user_password);//agregar validaciones nickname email, etc
     if (errores.length > 0) {
       return res.status(400).json({ errores });
     }
