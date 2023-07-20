@@ -6,9 +6,7 @@ const userRouter = require('./users');
 const songRouter = require('./songs');
 const playlistRouter = require('./playlists');
 
-router.use('/',(req, res) =>{
-    res.send('ruta routeada accedida con exito')
-});
+
 
 router.use('/users', userRouter);
 //comento ya que no defini los index de songs y playlists

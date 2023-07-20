@@ -8,6 +8,8 @@ exports.create = async (req, res) => {
     // Obtener los parámetros de la solicitud
     const user_name = req.body.username;
     const user_password = req.body.password;
+    const nickname = req.body.nickname;
+    const email = req.body.email;
     // Validar los parámetros
     const errores = userValidator.validateUser(user_name, user_password);
     if (errores.length > 0) {
@@ -20,6 +22,8 @@ exports.create = async (req, res) => {
     await UserModel.create({
       user_name,
       user_password: encriptedPassword,
+      nickname,
+      email,
     });
     // Enviar la respuesta
     return res.send('El registro ha sido creado con éxito.');
@@ -34,13 +38,11 @@ exports.create = async (req, res) => {
 exports.delete = async (req, res) => {
   try {
     // Obtener el id de usuario de los parámetros de la solicitud
-    const id_user = req.params.id_user;
-    // Comprobar si el usuario a eliminar es el mismo que está haciendo la solicitud
-    if (id_user != req.user.id) {
-      return res.send('No puedes eliminar los usuarios de otros usuarios.');
-    }
+    const { id } = req.params;
+    //const id_user = req.params.id;   
     // Eliminar el usuario
-    await UserModel.delete(id_user);
+    console.log(id);
+    await UserModel.delete(id);
     // Enviar la respuesta
     return res.send('El registro ha sido eliminado con éxito.');
   } catch (error) {
@@ -51,11 +53,50 @@ exports.delete = async (req, res) => {
   }
 };
 
+exports.obtain = async (req, res) => {
+  try {
+    // Obtener todos los usuarios de la base de datos
+    const users = await UserModel.getAllUsers();
+    // Enviar la respuesta con los usuarios
+    return res.json(users);
+  } catch (error) {
+    // Registrar el error
+    console.error(error);
+    // Enviar la respuesta de error
+    return res.status(500).send('Error al obtener los usuarios.');
+  }
+};
+
+exports.obtainByUser = async (req, res) => {
+  try {
+    // Obtener el username del parámetro de la ruta
+    const { username } = req.params;
+
+    // Obtener el usuario de la base de datos por el username
+    const user = await UserModel.getByUser(username);
+
+    if (user) {
+      // Enviar la respuesta con el usuario encontrado
+      return res.json(user);
+    } else {
+      // Si no se encuentra el usuario, enviar una respuesta 404 (no encontrado)
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+  } catch (error) {
+    // Registrar el error
+    console.error(error);
+    // Enviar la respuesta de error
+    return res.status(500).send('Error al obtener el usuario.');
+  }
+};
+
 exports.login = async (req, res) => {
   try {
     // Obtener los parámetros de la solicitud
     const user_name = req.body.username;
     const user_password = req.body.password;
+    const nickname = req.body.nickname;
+    const email = req.body.email;
     // Validar los parámetros
     const errores = userValidator.validateUser(user_name, user_password);
     if (errores.length > 0) {
@@ -65,11 +106,11 @@ exports.login = async (req, res) => {
     const user = await UserModel.getByUser(user_name);
     if (user) {
       // Comprobar si las contraseñas coinciden
-      const match = await bcrypt.compare(user_password, user.password);
+      const match = await bcrypt.compare(user_password, user.user_password);
       if (match) {
         // Generar un token JWT con cierta información
         const accessToken = await jwt.sign({
-          id: user.id_user,
+          id_user: user.id,
         },
         process.env.JWT_SECRET,
         {

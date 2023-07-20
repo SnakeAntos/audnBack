@@ -7,11 +7,15 @@ const UserModel = {
   },
 
   create(user) {
-    return knex.insert({ user_name: user.user_name, user_password: user.user_password}).into('user_app').returning('*');
+    return knex.insert({ user_name: user.user_name, email: user.email, nickname: user.nickname, user_password: user.user_password}).into('user_app').returning('*');
   },
 
   delete(id) {
     return knex('user_app').where({ id_user: id }).del();
+  },
+
+  getAllUsers() {
+    return knex.select().from('user_app');
   },
 };
 
