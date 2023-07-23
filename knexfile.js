@@ -8,13 +8,17 @@ module.exports = {
   development: {
     client: process.env.DB_DRIVER || 'pg',
     connection: {
-      host: process.env.DB_HOST,
+      host: process.env.UP_DB_HOST,
+      
       port: process.env.DB_PORT,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME
+      user: process.env.UP_DB_USERNAME,
+      password: process.env.UP_DB_PASSWORD,
+      database: process.env.UP_DB_NAME,
+      ssl: {
+        rejectUnauthorized: false // Puedes establecer rejectUnauthorized en false para deshabilitar la verificación del certificado SSL
+      }
     },
-    //connection: process.env.PG_CONNECTION_STRING,
+    connection: process.env.PG_CONNECTION_STRING,
   },
 
   staging: {
