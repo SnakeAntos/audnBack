@@ -1,0 +1,4 @@
+# Ignorar carpeta de dependencias
+node_modules/
+# Ignorar .env
+.env
