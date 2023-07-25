@@ -1,12 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const port = process.env.SERVER_PORT || 3000;
+const port = process.env.SERVER_PORT || 3001;
 const middlewares = require("./middlewares");
 const routes = require("./routes");
-const db = require('./db/db');
-
-
+const db = require("./db/db");
 
 async function checkDatabaseConnection() {
   try {
