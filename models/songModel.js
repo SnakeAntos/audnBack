@@ -4,6 +4,19 @@ const SongModel = {
   getByName(song_name) {
     return knex.select().from("song").where({ song_name: song_name }).first();
   },
+  getRandom() {
+    return knex("song")
+      .count("id_song as totalSongs")
+      .then((result) => {
+        const totalSongs = parseInt(result[0].totalSongs, 10);
+        const randomIndex = Math.floor(Math.random() * totalSongs);
+        return knex("song")
+          .select()
+          .offset(randomIndex)
+          .limit(1)
+          .then((randomSong) => randomSong[0]);
+      });
+  },
 
   create(song) {
     return knex

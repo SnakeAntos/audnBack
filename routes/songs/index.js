@@ -10,6 +10,7 @@ router.use(cors());
 router.post('/new', songController.create);
 router.get('/allsongs', songController.obtain);
 router.get('/:name', songController.obtainByName);
+router.get('/random/obtain', songController.obtainRandom)
 
 router.delete('/:id', songController.delete);//deberia agregar un control aqui para que no cualquiera pueda eliminar canciones
 

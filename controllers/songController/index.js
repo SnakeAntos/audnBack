@@ -1,4 +1,4 @@
-const songValidator = require('../../validators/songValidator');
+const songValidator = require("../../validators/songValidator");
 const SongModel = require("../../models/songModel");
 
 exports.create = async (req, res) => {
@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
     const errores = songValidator.validateSong(song_name, album, artist, img);
     if (errores.length > 0) {
       return res.status(400).json({ errores });
-    }    
+    }
     // Crear la cancion
     await SongModel.create({
       song_name,
@@ -33,12 +33,12 @@ exports.create = async (req, res) => {
       weather,
     });
     // Enviar la respuesta
-    return res.send('El registro ha sido creado con éxito.');
+    return res.send("El registro ha sido creado con éxito.");
   } catch (error) {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta
-    return res.status(500).send('Error al crear cancion.');
+    return res.status(500).send("Error al crear cancion.");
   }
 };
 
@@ -46,17 +46,17 @@ exports.delete = async (req, res) => {
   try {
     // Obtener el id de cancion de los parámetros de la solicitud
     const { id } = req.params;
-       
+
     // Eliminar cancion
     console.log(id);
     await SongModel.delete(id);
     // Enviar la respuesta
-    return res.send('El registro ha sido eliminado con éxito.');
+    return res.send("El registro ha sido eliminado con éxito.");
   } catch (error) {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta
-    return res.status(500).send('Error al eliminar.');
+    return res.status(500).send("Error al eliminar.");
   }
 };
 
@@ -70,7 +70,7 @@ exports.obtain = async (req, res) => {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta de error
-    return res.status(500).send('Error al obtener las canciones.');
+    return res.status(500).send("Error al obtener las canciones.");
   }
 };
 
@@ -81,24 +81,34 @@ exports.obtainByName = async (req, res) => {
 
     // Obtener el usuario de la base de datos por el username
     const song = await SongModel.getByName(name);
-    
 
     if (song) {
       // Enviar la respuesta con el usuario encontrado
       return res.json(song);
     } else {
       // Si no se encuentra el usuario, enviar una respuesta 404 (no encontrado)
-      return res.status(404).json({ message: 'Cancion no encontrada' });
+      return res.status(404).json({ message: "Cancion no encontrada" });
     }
   } catch (error) {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta de error
-    return res.status(500).send('Error al obtener la cancion.');
+    return res.status(500).send("Error al obtener la cancion.");
   }
 };
 
-
-   
-  
-
+exports.obtainRandom = async (req, res) => {
+  try {
+    const song = await SongModel.getRandom();
+    if (song) {
+      return res.json(song);
+    } else {
+      return res
+        .status(404)
+        .json({ message: "error al obtener cancion aleatoria" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Error al obtener la cancion.");
+  }
+};
