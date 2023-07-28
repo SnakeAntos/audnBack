@@ -13,6 +13,12 @@ const PlaylistModel = {
     return knex.select().from("playlist").where({ id_playlist: id }).first();
   },
 
+  getByIDuserPlusName(id, name) {
+    return knex('playlist')
+      .select('id_playlist', 'playlist_name', 'user_id') 
+      .where({ user_id: id, playlist_name: name })
+      .first();
+  },
   create(playlist) {
     return knex
       .insert({

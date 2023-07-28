@@ -6,19 +6,21 @@ exports.create = async (req, res) => {
     // Obtener los parámetros de la solicitud
     const playlist_name = req.body.name;
     const user_id = req.body.userID;
-    
+
     // Validar los parámetros
     const errores = playlistValidator.validatePlaylist(playlist_name, user_id);
     if (errores.length > 0) {
       return res.status(400).json({ errores });
-    }    
-    // Crear la cancion
-    await PlaylistModel.create({
+    }
+
+    // Crear la playlist
+    const playlist = await PlaylistModel.create({
       playlist_name,
-      user_id,      
+      user_id,
     });
-    // Enviar la respuesta
-    return res.send('El registro ha sido creado con éxito.');
+
+    // Enviar la respuesta con el id de la playlist
+    return res.json({ id_playlist: playlist.id_playlist });
   } catch (error) {
     // Registrar el error
     console.error(error);
@@ -26,7 +28,6 @@ exports.create = async (req, res) => {
     return res.status(500).send('Error al crear playlist.');
   }
 };
-
 exports.delete = async (req, res) => {
   try {
     // Obtener el id de cancion de los parámetros de la solicitud

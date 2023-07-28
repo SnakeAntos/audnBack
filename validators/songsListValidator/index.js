@@ -1,11 +1,11 @@
-exports.validateSong = (song_id, playlist_id) => {
+exports.validateSongsList = (song_id, playlist_id) => {
     const errores = [];
   
-    if (!song_id || song_id.trim() === '' || isNaN(song_id)) {
+    if (!song_id  || isNaN(song_id)) {
       errores.push('Debes ingresar un valor numerico');
     }
   
-    if (!playlist_id || playlist_id.trim() === '' || isNaN(playlist_id)) {
+    if (!playlist_id || isNaN(playlist_id)) {
         errores.push('Debes ingresar un valor numerico');
     }
 

@@ -9,22 +9,22 @@ exports.create = async (req, res) => {
     const playlist_id = req.body.playlistID;
     
     // Validar los parámetros
-    const errores = songListValidator.validateSongList(playlist_id, song_id);
+    const errores = songsListValidator.validateSongsList(playlist_id, song_id);
     if (errores.length > 0) {
       return res.status(400).json({ errores });
     }    
     // Crear la cancion
-    await SongListModel.create({
+    await SongsListModel.create({
       song_id,
       playlist_id,      
     });
     // Enviar la respuesta
-    return res.send('El registro ha sido creado con éxito.');
+    return res.json({message:'El registro ha sido creado con éxito.'});
   } catch (error) {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta
-    return res.status(500).send('Error al crear playlist.');
+    return res.status(500).json('Error al crear playlist.');
   }
 };
 
@@ -66,7 +66,7 @@ exports.obtainByPlaylistID = async (req, res) => {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta de error
-    return res.status(500).send('Error al obtener la lista.');
+    return res.status(500).json('Error al obtener la lista.');
   }
 };
 
