@@ -6,6 +6,7 @@ const userRouter = require('./users');
 const songRouter = require('./songs');
 const playlistRouter = require('./playlists');
 const cupidRouter = require('./cupid');
+const songsListsRouter = require('./songsList')
 
 
 
@@ -14,5 +15,6 @@ router.use('/users', userRouter);
 router.use('/songs', songRouter);
 router.use('/playlists', playlistRouter);
 router.use('/cupids', cupidRouter);
+router.use('/songslists', songsListsRouter);
 
 module.exports = router;
