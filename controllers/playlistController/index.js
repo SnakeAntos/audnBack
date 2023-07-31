@@ -1,7 +1,7 @@
 const playlistValidator = require('../../validators/playlistValidator');
 const PlaylistModel = require("../../models/playlistModel");
 
-exports.create = async (req, res) => {
+exports.create =  (req, res) => {
   try {
     // Obtener los parámetros de la solicitud
     const playlist_name = req.body.name;
@@ -14,13 +14,18 @@ exports.create = async (req, res) => {
     }
 
     // Crear la playlist
-    const playlist = await PlaylistModel.create({
+      PlaylistModel.create({
       playlist_name,
       user_id,
-    });
-
-    // Enviar la respuesta con el id de la playlist
-    return res.json({ id_playlist: playlist.id_playlist });
+    })
+    .then(playlist=>{
+      console.log(playlist);
+      console.log(playlist[0].id_playlist);
+      return res.json({ id_playlist: playlist[0].id_playlist });
+    })
+    ;   
+   
+    
   } catch (error) {
     // Registrar el error
     console.error(error);
@@ -28,52 +33,50 @@ exports.create = async (req, res) => {
     return res.status(500).send('Error al crear playlist.');
   }
 };
-exports.delete = async (req, res) => {
+exports.getByNameAndId = async (req, res) => {
+  
+  const name = req.params.name;
+  const id = req.params.id;
+
   try {
-    // Obtener el id de cancion de los parámetros de la solicitud
-    const { id } = req.params;
-       
-    // Eliminar cancion
-    console.log(id);
-    await PlaylistModel.delete(id);
-    // Enviar la respuesta
-    return res.send('El registro ha sido eliminado con éxito.');
+    const playlists = await PlaylistModel.getByIDuserPlusName(id, name);
+    
+    return res.status(200).json(playlists);
   } catch (error) {
-    // Registrar el error
-    console.error(error);
-    // Enviar la respuesta
+    console.error("Error al obtener playlists:", error);
+    return res.status(500).json({ mensaje: "Error del servidor" });
+  }
+};
+
+exports.delete = async (req, res) => {
+  try {   
+    const { id } = req.params;   
+    console.log(id);
+    await PlaylistModel.delete(id);   
+    return res.send('El registro ha sido eliminado con éxito.');
+  } catch (error) {    
+    console.error(error);    
     return res.status(500).send('Error al eliminar.');
   }
 };
 
 exports.obtain = async (req, res) => {
-  try {
-    // Obtener todas las canciones
-    const playlists = await PlaylistModel.getAllPlaylists();
-    // Enviar la respuesta con los usuarios
+  try {   
+    const playlists = await PlaylistModel.getAllPlaylists();   
     return res.json(playlists);
-  } catch (error) {
-    // Registrar el error
-    console.error(error);
-    // Enviar la respuesta de error
+  } catch (error) {   
+    console.error(error);   
     return res.status(500).send('Error al obtener las canciones.');
   }
 };
 
 exports.obtainByName = async (req, res) => {
-  try {
-    // Obtener el username del parámetro de la ruta
-    const { name } = req.params;
-
-    // Obtener el usuario de la base de datos por el username
+  try {  
+    const { name } = req.params;   
     const playlist = await PlaylistModel.getByName(name);
-    
-
-    if (playlist) {
-      // Enviar la respuesta con el usuario encontrado
+    if (playlist) {     
       return res.json(playlist);
-    } else {
-      // Si no se encuentra el usuario, enviar una respuesta 404 (no encontrado)
+    } else {    
       return res.status(404).json({ message: 'Cancion no encontrada' });
     }
   } catch (error) {
