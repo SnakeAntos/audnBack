@@ -70,10 +70,10 @@ exports.obtain = async (req, res) => {
 exports.obtainByUser = async (req, res) => {
   try {
     // Obtener el username del parámetro de la ruta
-    const { username } = req.params;
+    const { nickname } = req.params;
 
     // Obtener el usuario de la base de datos por el username
-    const user = await UserModel.getByUser(username);
+    const user = await UserModel.getByUser(nickname);
 
     if (user) {
       // Enviar la respuesta con el usuario encontrado
