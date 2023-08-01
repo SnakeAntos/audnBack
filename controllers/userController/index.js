@@ -26,12 +26,12 @@ exports.create = async (req, res) => {
       email,
     });
     // Enviar la respuesta
-    return res.send('El registro ha sido creado con éxito.');
+    return res.json({message: 'El registro ha sido creado con éxito.'});
   } catch (error) {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta
-    return res.status(500).send('Error al crear el usuario.');
+    return res.status(500).json({message: 'Error al crear el usuario.'});
   }
 };
 
@@ -70,10 +70,10 @@ exports.obtain = async (req, res) => {
 exports.obtainByUser = async (req, res) => {
   try {
     // Obtener el username del parámetro de la ruta
-    const { nickname } = req.params;
+    const { user_name } = req.params;
 
     // Obtener el usuario de la base de datos por el username
-    const user = await UserModel.getByUser(nickname);
+    const user = await UserModel.getByUser(user_name);
 
     if (user) {
       // Enviar la respuesta con el usuario encontrado
@@ -112,6 +112,7 @@ exports.login = async (req, res) => {
         console.log(user)
         const accessToken = await jwt.sign({
           id_user: user.id_user,
+          username: user.user_name,
         },
         process.env.JWT_SECRET,
         {
