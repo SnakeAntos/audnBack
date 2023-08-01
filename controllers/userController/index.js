@@ -109,8 +109,9 @@ exports.login = async (req, res) => {
       const match = await bcrypt.compare(user_password, user.user_password);
       if (match) {
         // Generar un token JWT con cierta información
+        console.log(user)
         const accessToken = await jwt.sign({
-          id_user: user.id,
+          id_user: user.id_user,
         },
         process.env.JWT_SECRET,
         {
