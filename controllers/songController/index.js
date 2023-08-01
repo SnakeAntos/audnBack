@@ -112,3 +112,21 @@ exports.obtainRandom = async (req, res) => {
     return res.status(500).send("Error al obtener la cancion.");
   }
 };
+
+//Obtener canciones por genero
+
+exports.obtainbyGenre = async (req, res) => {
+  try {
+    const song = await SongModel.getbyGenre();
+    if (song) {
+      return res.json(song);
+    } else {
+      return res
+        .status(404)
+        .json({ message: "error al obtener cancion aleatoria" });
+    }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Error al obtener la cancion.");
+  }
+};
