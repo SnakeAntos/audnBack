@@ -25,8 +25,16 @@ exports.create = async (req, res) => {
       nickname,
       email,
     });
+      // Generar un token JWT con cierta información
+      const accessToken = await jwt.sign({
+        username: user_name,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRATION_TIME
+      });
     // Enviar la respuesta
-    return res.json({message: 'El registro ha sido creado con éxito.'});
+    return res.json({message: 'El registro ha sido creado con éxito.', accessToken});
   } catch (error) {
     // Registrar el error
     console.error(error);
