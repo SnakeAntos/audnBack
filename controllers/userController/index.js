@@ -70,10 +70,10 @@ exports.obtain = async (req, res) => {
 exports.obtainByUser = async (req, res) => {
   try {
     // Obtener el username del parámetro de la ruta
-    const { username } = req.params;
+    const { nickname } = req.params;
 
     // Obtener el usuario de la base de datos por el username
-    const user = await UserModel.getByUser(username);
+    const user = await UserModel.getByUser(nickname);
 
     if (user) {
       // Enviar la respuesta con el usuario encontrado
@@ -109,8 +109,9 @@ exports.login = async (req, res) => {
       const match = await bcrypt.compare(user_password, user.user_password);
       if (match) {
         // Generar un token JWT con cierta información
+        console.log(user)
         const accessToken = await jwt.sign({
-          id_user: user.id,
+          id_user: user.id_user,
         },
         process.env.JWT_SECRET,
         {
