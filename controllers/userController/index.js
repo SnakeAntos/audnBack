@@ -26,12 +26,12 @@ exports.create = async (req, res) => {
       email,
     });
     // Enviar la respuesta
-    return res.send('El registro ha sido creado con éxito.');
+    return res.json({message: 'El registro ha sido creado con éxito.'});
   } catch (error) {
     // Registrar el error
     console.error(error);
     // Enviar la respuesta
-    return res.status(500).send('Error al crear el usuario.');
+    return res.status(500).json({message: 'Error al crear el usuario.'});
   }
 };
 
