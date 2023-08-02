@@ -7,6 +7,7 @@ const verifyToken = (req, res, next) => {
     if (!token) {
         return res.status(401).send( 'Acceso denegado.' );
     }
+    console.log(token)
     try {
         // verify token
         const verified = jwt.verify(token, process.env.JWT_SECRET);

@@ -25,8 +25,16 @@ exports.create = async (req, res) => {
       nickname,
       email,
     });
+      // Generar un token JWT con cierta información
+      const accessToken = await jwt.sign({
+        username: user_name,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRATION_TIME
+      });
     // Enviar la respuesta
-    return res.json({message: 'El registro ha sido creado con éxito.'});
+    return res.json({message: 'El registro ha sido creado con éxito.', username: user_name, accessToken});
   } catch (error) {
     // Registrar el error
     console.error(error);
@@ -71,7 +79,7 @@ exports.obtainByUser = async (req, res) => {
   try {
     // Obtener el username del parámetro de la ruta
     const { user_name } = req.params;
-
+    console.log(user_name);
     // Obtener el usuario de la base de datos por el username
     const user = await UserModel.getByUser(user_name);
 
