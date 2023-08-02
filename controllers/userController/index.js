@@ -34,7 +34,7 @@ exports.create = async (req, res) => {
         expiresIn: process.env.JWT_EXPIRATION_TIME
       });
     // Enviar la respuesta
-    return res.json({message: 'El registro ha sido creado con éxito.', accessToken});
+    return res.json({message: 'El registro ha sido creado con éxito.', username: user_name, accessToken});
   } catch (error) {
     // Registrar el error
     console.error(error);
@@ -79,7 +79,7 @@ exports.obtainByUser = async (req, res) => {
   try {
     // Obtener el username del parámetro de la ruta
     const { user_name } = req.params;
-
+    console.log(user_name);
     // Obtener el usuario de la base de datos por el username
     const user = await UserModel.getByUser(user_name);
 

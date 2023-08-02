@@ -3,6 +3,7 @@ const knex = require('../db/db');
 
 const UserModel = {
   getByUser(user_name) {
+    console.log(user_name)
     return knex.select().from('user_app').where({ user_name: user_name }).first();
   },
 
